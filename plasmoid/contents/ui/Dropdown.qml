@@ -22,6 +22,37 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 Item {
+    property string outputText: ""
+    id: stdoutItem
+    PlasmaCore.DataSource {
+		id: getWithStdout
+		engine: "executable"
+		connectedSources: []
+		onNewData: {
+			var exitCode = data["exit code"]
+			var exitStatus = data["exit status"]
+			var stdout = data["stdout"]
+			var stderr = data["stderr"]
+			exited(sourceName, exitCode, exitStatus, stdout, stderr)
+			disconnectSource(sourceName) // cmd finished
+		}
+		function exec(cmd) {
+			if (cmd) {
+				connectSource(cmd)
+			}
+		}
+		signal exited(string cmd, int exitCode, int exitStatus, string stdout, string stderr)
+	}
+    
+    Connections {
+        target: getWithStdout
+        onExited: {
+            stdoutItem.outputText = stdout.replace('\n', ' ').trim()
+        }
+    }
+}
+
+Item {
     property real mediumSpacing: 1.5*units.smallSpacing
     property real textHeight: theme.defaultFont.pixelSize + theme.smallestFont.pixelSize + units.smallSpacing
     property real itemHeight: Math.max(units.iconSizes.medium, textHeight)
@@ -156,7 +187,8 @@ Item {
                             anchors.verticalCenter: parent.verticalCenter
 
                             PlasmaComponents.Label {
-                                text: (model['labelMajor'] !== "status") ? model['labelMajor'] : executable.exec(model["command"], function(stdout){return stdout;})
+                                id: major
+                                text: (model['labelMajor'] !== "status") ? model['labelMajor'] : stdoutItem.outputText;
                                 width: parent.width
                                 height: theme.defaultFont.pixelSize
                                 elide: Text.ElideRight
