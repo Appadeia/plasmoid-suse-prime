@@ -1,7 +1,5 @@
 # suseprime-plasmoid
 A plasmoid for users of openSUSE PRIME.
 
-Very WIP, only use if you like testing.
-
-Use the included CMakeLists file to install it.
-If you don't know how to use CMake, you probably don't need to be testing this.
+![Image of the SUSE Prime plasmoid working.](https://github.com/Appadeia/suseprime-plasmoid/raw/master/locrian.png)
+*The SUSE Prime plasmoid in operation.*
