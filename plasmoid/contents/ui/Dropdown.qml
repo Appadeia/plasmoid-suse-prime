@@ -20,6 +20,7 @@ import QtQuick.Layouts 1.1
 import org.kde.plasma.core 2.0 as PlasmaCore
 import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
+import QtGraphicalEffects 1.12
 
 Item {
 
@@ -165,14 +166,14 @@ Item {
                     }
                     return true;
                 }
-                visible: isVisible()
                 width: parent.width
-                height: isVisible() ? itemHeight + 2*mediumSpacing : 0
+                height: itemHeight + 2*mediumSpacing
                 
                 property bool isHovered: false
                 property bool isEjectHovered: false
 
                 MouseArea {
+                    enabled: parent.isVisible()
                     anchors.fill: parent
                     hoverEnabled: true
 
@@ -191,6 +192,7 @@ Item {
                     }
 
                     Row {
+                        enabled: parent.enabled
                         x: mediumSpacing
                         y: mediumSpacing
                         width: parent.width - 2*mediumSpacing
@@ -198,6 +200,7 @@ Item {
                         spacing: mediumSpacing
 
                         Item {
+                            enabled: parent.enabled
                             height: units.iconSizes.medium
                             width: height
                             anchors.verticalCenter: parent.verticalCenter
@@ -207,16 +210,29 @@ Item {
                                 anchors.fill: parent
                                 fillMode: Image.PreserveAspectFit
                                 source: "../images/" + model["img"] + ".png"
+                                Desaturate {
+                                    visible: !parent.enabled
+                                    anchors.fill: parent
+                                    source: parent
+                                    desaturation: 1.0
+                                }
                             }
                             PlasmaCore.IconItem {
                                 visible: (model["vis"] !== "img" && model["vis"] !== "nil")
                                 anchors.fill: parent
                                 source: model['source']
                                 active: isHovered
+                                Desaturate {
+                                    visible: !parent.enabled
+                                    anchors.fill: parent
+                                    source: parent
+                                    desaturation: 1.0
+                                }
                             }
                         }
 
                         Column {
+                            enabled: parent.enabled
                             width: parent.width - units.iconSizes.medium - mediumSpacing
                             height: textHeight
                             spacing: 0
@@ -234,7 +250,7 @@ Item {
                                 height: units.smallSpacing
                             }
                             PlasmaComponents.Label {
-                                text: model['labelMinor']
+                                text: parent.enabled ? model['labelMinor'] : "You are already using this device."
                                 font.pointSize: theme.smallestFont.pointSize
                                 opacity: isHovered ? 1.0 : 0.6
                                 width: parent.width
