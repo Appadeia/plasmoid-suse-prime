@@ -4,7 +4,6 @@ Name=PRIME Selector
 Comment=Select between NVidia or Intel
 Type=Service
 
-X-KDE-Library=plasma_applet_prime
 X-KDE-ParentApp=
 X-KDE-PluginInfo-Author=pontos
 X-KDE-PluginInfo-Email=uhhadd@gmail.com
