@@ -22,37 +22,52 @@ import org.kde.plasma.components 2.0 as PlasmaComponents
 import org.kde.plasma.extras 2.0 as PlasmaExtras
 
 Item {
-    property string outputText: ""
-    id: stdoutItem
-    PlasmaCore.DataSource {
-		id: getWithStdout
-		engine: "executable"
-		connectedSources: []
-		onNewData: {
-			var exitCode = data["exit code"]
-			var exitStatus = data["exit status"]
-			var stdout = data["stdout"]
-			var stderr = data["stderr"]
-			exited(sourceName, exitCode, exitStatus, stdout, stderr)
-			disconnectSource(sourceName) // cmd finished
-		}
-		function exec(cmd) {
-			if (cmd) {
-				connectSource(cmd)
-			}
-		}
-		signal exited(string cmd, int exitCode, int exitStatus, string stdout, string stderr)
-	}
-    
-    Connections {
-        target: getWithStdout
-        onExited: {
-            stdoutItem.outputText = stdout.replace('\n', ' ').trim()
+
+    Item {
+        property string outputText: ""
+        id: stdoutItem
+        PlasmaCore.DataSource {
+            id: getWithStdout
+            engine: "executable"
+            connectedSources: []
+            onNewData: {
+                var exitCode = data["exit code"]
+                var exitStatus = data["exit status"]
+                var stdout = data["stdout"]
+                var stderr = data["stderr"]
+                exited(sourceName, exitCode, exitStatus, stdout, stderr)
+                disconnectSource(sourceName) // cmd finished
+            }
+            function exec(cmd) {
+                if (cmd) {
+                    connectSource(cmd)
+                }
+            }
+            signal exited(string cmd, int exitCode, int exitStatus, string stdout, string stderr)
+        }
+        
+        Connections {
+            target: getWithStdout
+            onExited: {
+                stdoutItem.outputText = stdout.replace('\n', ' ').trim()
+            }
+        }
+
+        Timer {
+            id: timer
+            interval: 500
+            running: true
+            repeat: true
+            onTriggered: {
+                getWithStdout.exec("/usr/sbin/prime-select get-current")
+            }
+            Component.onCompleted: {
+                triggered()
+            }
         }
     }
-}
 
-Item {
+
     property real mediumSpacing: 1.5*units.smallSpacing
     property real textHeight: theme.defaultFont.pixelSize + theme.smallestFont.pixelSize + units.smallSpacing
     property real itemHeight: Math.max(units.iconSizes.medium, textHeight)
@@ -69,6 +84,7 @@ Item {
         id: controlsModel
         ListElement {
             vis: "nil"
+            card: "nil"
             labelMajor: "status"
             labelMinor: "Current status of drivers"
             command: "true"
@@ -77,6 +93,7 @@ Item {
             vis: "img"
             source: "pattern-ruby-devel"
             img: "nvidia"
+            card: "nvidia"
             labelMajor: "Enable NVidia"
             labelMinor: "Switch to your Nvidia graphics"
             command: "kdesu /usr/sbin/prime-select nvidia"
@@ -85,6 +102,7 @@ Item {
             vis: "img"
             source: "pattern-ruby-devel"
             img: "intel"
+            card: "intel"
             labelMajor: "Enable Intel"
             labelMinor: "Switch to your Intel graphics"
             command: "kdesu /usr/sbin/prime-select nvidia"
@@ -130,9 +148,27 @@ Item {
             highlightResizeDuration: 0
 
             delegate: Item {
+                function isVisible() {
+                    if (model["card"] === "nvidia" ) {
+                        if (stdoutItem.outputText.toLowerCase().includes("intel")) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                    if (model["card"] === "intel" ) {
+                        if (stdoutItem.outputText.toLowerCase().includes("nvidia")) {
+                            return true;
+                        } else {
+                            return false;
+                        }
+                    }
+                    return true;
+                }
+                visible: isVisible()
                 width: parent.width
-                height: itemHeight + 2*mediumSpacing
-
+                height: isVisible() ? itemHeight + 2*mediumSpacing : 0
+                
                 property bool isHovered: false
                 property bool isEjectHovered: false
 
