@@ -33,10 +33,8 @@ Item {
                 stdoutItem.outputText = stdout.replace('\n', ' ').trim()
                 if (stdoutItem.outputText.toLowerCase().includes("nvidia")) {
                     stdoutItem.activePanelIcon = "nvidia"
-                    stdoutItem.activePopupIcon = "nvidia22px.svg"
                 } else {
                     stdoutItem.activePanelIcon = "intel"
-                    stdoutItem.activePopupIcon = "intel22px.svg"
                 }
             }
         }
