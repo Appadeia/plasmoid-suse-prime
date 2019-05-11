@@ -221,7 +221,7 @@ Item {
                                     visible: !parent.enabled
                                     anchors.fill: parent
                                     source: parent
-                                    desaturation: 1.0
+                                    desaturation: 1.4
                                 }
                             }
                             PlasmaCore.IconItem {
