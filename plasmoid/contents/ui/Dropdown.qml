@@ -91,9 +91,9 @@ Item {
             command: "true"
         }
         ListElement {
-            vis: "icon"
+            vis: "img"
             source: "../images/nvidia.svg"
-            img: "nvidia.svg"
+            img: "nvidia22px.svg"
             card: "nvidia"
             labelMajor: "Enable NVidia"
             labelMinor: "Switch to your Nvidia graphics"
@@ -102,7 +102,7 @@ Item {
         ListElement {
             vis: "img"
             source: "pattern-ruby-devel"
-            img: "intel.png"
+            img: "intel22px.svg"
             card: "intel"
             labelMajor: "Enable Intel"
             labelMinor: "Switch to your Intel graphics"
