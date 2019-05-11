@@ -91,9 +91,9 @@ Item {
             command: "true"
         }
         ListElement {
-            vis: "img"
-            source: "pattern-ruby-devel"
-            img: "nvidia"
+            vis: "icon"
+            source: "../images/nvidia.svg"
+            img: "nvidia.svg"
             card: "nvidia"
             labelMajor: "Enable NVidia"
             labelMinor: "Switch to your Nvidia graphics"
@@ -102,7 +102,7 @@ Item {
         ListElement {
             vis: "img"
             source: "pattern-ruby-devel"
-            img: "intel"
+            img: "intel.png"
             card: "intel"
             labelMajor: "Enable Intel"
             labelMinor: "Switch to your Intel graphics"
@@ -209,7 +209,7 @@ Item {
                                 visible: (model["vis"] !== "icon" && model["vis"] !== "nil")
                                 anchors.fill: parent
                                 fillMode: Image.PreserveAspectFit
-                                source: "../images/" + model["img"] + ".png"
+                                source: "../images/" + model["img"]
                                 Desaturate {
                                     visible: !parent.enabled
                                     anchors.fill: parent
