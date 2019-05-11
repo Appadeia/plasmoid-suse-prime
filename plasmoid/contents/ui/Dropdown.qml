@@ -26,6 +26,7 @@ Item {
 
     Item {
         property string outputText: ""
+        property string activePopupIcon: ""
         id: stdoutItem
         PlasmaCore.DataSource {
             id: getWithStdout
@@ -51,6 +52,11 @@ Item {
             target: getWithStdout
             onExited: {
                 stdoutItem.outputText = stdout.replace('\n', ' ').trim()
+                if (stdoutItem.outputText.toLowerCase().includes("nvidia")) {
+                    stdoutItem.activePopupIcon = "nvidia22px.svg"
+                } else {
+                    stdoutItem.activePopupIcon = "intel22px.svg"
+                }
             }
         }
 
@@ -84,8 +90,9 @@ Item {
     ListModel {
         id: controlsModel
         ListElement {
-            vis: "nil"
+            vis: "img"
             card: "nil"
+            img: "statusIcon"
             labelMajor: "status"
             labelMinor: "Current status of drivers"
             command: "true"
@@ -209,7 +216,7 @@ Item {
                                 visible: (model["vis"] !== "icon" && model["vis"] !== "nil")
                                 anchors.fill: parent
                                 fillMode: Image.PreserveAspectFit
-                                source: "../images/" + model["img"]
+                                source: (model['labelMajor'] !== "status") ? "../images/" + model["img"] : "../images/" + stdoutItem.activePopupIcon
                                 Desaturate {
                                     visible: !parent.enabled
                                     anchors.fill: parent
