@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http: //www.gnu.org/licenses/>.
  */
+
 import QtQuick 2.5
 import QtQuick.Controls 1.4
 import QtQuick.Layouts 1.1
@@ -94,7 +95,7 @@ Item {
             card: "nil"
             img: "statusIcon"
             labelMajor: "status"
-            labelMinor: "Current status of drivers"
+            labelMinor: qsTr("Current status of drivers")
             command: "true"
         }
         ListElement {
@@ -102,8 +103,8 @@ Item {
             source: "../images/nvidia.svg"
             img: "nvidia22px.svg"
             card: "nvidia"
-            labelMajor: "Enable NVidia"
-            labelMinor: "Switch to your Nvidia graphics"
+            labelMajor: qsTr("Enable NVidia")
+            labelMinor: qsTr("Switch to Nvidia graphics")
             command: "kdesu /usr/sbin/prime-select nvidia"
         }
         ListElement {
@@ -111,8 +112,8 @@ Item {
             source: "pattern-ruby-devel"
             img: "intel22px.svg"
             card: "intel"
-            labelMajor: "Enable Intel"
-            labelMinor: "Switch to your Intel graphics"
+            labelMajor: qsTr("Enable Intel")
+            labelMinor: qsTr("Switch to Intel graphics")
             command: "kdesu /usr/sbin/prime-select nvidia"
         }
     }
