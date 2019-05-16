@@ -54,9 +54,9 @@ Item {
             onExited: {
                 stdoutItem.outputText = stdout.replace('\n', ' ').trim()
                 if (stdoutItem.outputText.toLowerCase().includes("nvidia")) {
-                    stdoutItem.activePopupIcon = "nvidia22px.svg"
+                    stdoutItem.activePopupIcon = "nvidia-symbolic"
                 } else {
-                    stdoutItem.activePopupIcon = "intel22px.svg"
+                    stdoutItem.activePopupIcon = "intel-symbolic"
                 }
             }
         }
@@ -91,7 +91,7 @@ Item {
     ListModel {
         id: controlsModel
         ListElement {
-            vis: "img"
+            vis: "icon"
             card: "nil"
             img: "statusIcon"
             labelMajor: "status"
@@ -99,18 +99,18 @@ Item {
             command: "true"
         }
         ListElement {
-            vis: "img"
-            source: "../images/nvidia.svg"
-            img: "nvidia22px.svg"
+            vis: "icon"
+            source: "nvidia-symbolic"
+            img: "nvidia-symbolic"
             card: "nvidia"
             labelMajor: qsTr("Enable NVidia")
             labelMinor: qsTr("Switch to Nvidia graphics")
             command: "kdesu /usr/sbin/prime-select nvidia"
         }
         ListElement {
-            vis: "img"
-            source: "pattern-ruby-devel"
-            img: "intel22px.svg"
+            vis: "icon"
+            source: "intel-symbolic"
+            img: "intel-symbolic"
             card: "intel"
             labelMajor: qsTr("Enable Intel")
             labelMinor: qsTr("Switch to Intel graphics")
@@ -224,11 +224,12 @@ Item {
                                     source: parent
                                     desaturation: 1.4
                                 }
+                                opacity: this.enabled ? 1.0 : 0.25
                             }
                             PlasmaCore.IconItem {
                                 visible: (model["vis"] !== "img" && model["vis"] !== "nil")
                                 anchors.fill: parent
-                                source: model['source']
+                                source: (model['labelMajor'] !== "status") ? model['source'] : stdoutItem.activePopupIcon
                                 active: isHovered
                                 Desaturate {
                                     visible: !parent.enabled
